@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .careers-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+
+    .careers-title {
+        font-size: 40px;
+        font-weight: 700;
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .careers-subtitle {
+        font-size: 18px;
+        color: #6c757d;
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto 40px;
+        font-style: italic;
+    }
+
+    .careers-list {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .careers-item {
+        background: #fff;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .careers-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .careers-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        cursor: pointer;
+        background: #2c3e50;
+        color: #fff;
+    }
+
+    .careers-header h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        flex: 1;
+    }
+
+    .careers-date {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-right: 15px;
+    }
+
+    .careers-toggle {
+        font-size: 16px;
+        transition: transform 0.3s ease;
+    }
+
+    .careers-content {
+        display: none;
+        padding: 20px;
+        background: #f8f9fa;
+    }
+
+    .careers-content p {
+        font-size: 15px;
+        color: #444;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .careers-details {
+        margin-bottom: 10px;
+    }
+
+    .careers-details span {
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    .careers-link {
+        display: inline-block;
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+        margin-top: 10px;
+    }
+
+    .careers-link:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+
+    .pagination-container {
+        margin-top: 30px;
+    }
+
+    .pagination .page-item .page-link {
+        color: #2c3e50;
+        border: 1px solid #dee2e6;
+        margin: 0 3px;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #2c3e50;
+        color: white;
+        border-color: #2c3e50;
+    }
+
+    @media (max-width: 768px) {
+        .careers-title {
+            font-size: 32px;
+        }
+        .careers-subtitle {
+            font-size: 16px;
+        }
+        .careers-header h3 {
+            font-size: 18px;
+        }
+        .careers-date {
+            font-size: 12px;
+        }
+        .careers-content p {
+            font-size: 14px;
+        }
+        .careers-section {
+            padding: 50px 0;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .careers-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .careers-date {
+            margin-right: 0;
+        }
+    }
+</style>
+
+<section id="careers" class="careers-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="careers-title">Careers</h1>
+            <p class="careers-subtitle">Explore exciting job opportunities at our school.</p>
+        </div>
+
+        <div class="careers-list">
+            {% for job in job_vacancies %}
+            <div class="careers-item">
+                <div class="careers-header" onclick="toggleCareers(this)">
+                    <h3 class="text-white">{{ job.title }}</h3>
+                    <span class="careers-date">{{ job.posted_date|date:"F d, Y" }}</span>
+                    <i class="fas fa-chevron-down careers-toggle"></i>
+                </div>
+                <div class="careers-content">
+                    <p>{{ job.description|linebreaks }}</p>
+                    <div class="careers-details">
+                        <p><span>Job Type:</span> {{ job.get_job_type_display }}</p>
+                        <p><span>Location:</span> {{ job.location }}</p>
+                        <p><span>Posted Date:</span> {{ job.posted_date|date:"F d, Y" }}</p>
+                        {% if job.last_date_to_apply %}
+                            <p><span>Last Date to Apply:</span> {{ job.last_date_to_apply|date:"F d, Y" }}</p>
+                        {% endif %}
+                        {% if job.mail %}
+                            <p><span>Contact Email:</span> <a href="mailto:{{ job.mail }}" class="careers-link">{{ job.mail }}</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center text-muted">No job vacancies available at the moment.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container text-center mt-4">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if job_vacancies.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ job_vacancies.previous_page_number }}" aria-label="Previous">«</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">«</span></li>
+                    {% endif %}
+
+                    {% for num in job_vacancies.paginator.page_range %}
+                        {% if job_vacancies.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num >= job_vacancies.number|add:'-2' and num <= job_vacancies.number|add:'2' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if job_vacancies.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ job_vacancies.next_page_number }}" aria-label="Next">»</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">»</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<script>
+    function toggleCareers(header) {
+        const content = header.nextElementSibling;
+        const toggleIcon = header.querySelector('.careers-toggle');
+        const isOpen = content.style.display === 'block';
+
+        document.querySelectorAll('.careers-content').forEach(item => {
+            item.style.display = 'none';
+            item.parentElement.querySelector('.careers-toggle').classList.remove('fa-chevron-up');
+            item.parentElement.querySelector('.careers-toggle').classList.add('fa-chevron-down');
+        });
+
+        if (!isOpen) {
+            content.style.display = 'block';
+            toggleIcon.classList.remove('fa-chevron-down');
+            toggleIcon.classList.add('fa-chevron-up');
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+    <div id="admissions" class="section lb">
+        <div class="container">
+            <div class="section-title row text-center">
+                <div class="col-md-8 offset-md-2">
+                    <h3>Admissions</h3>
+                    <p class="lead">We welcome students from LKG to Class 12 to embark on a journey of academic excellence and personal growth. Explore our enrollment process, requirements, and access downloadable forms below.</p>
+                </div>
+            </div><!-- end title -->
+
+            <div class="row align-items-center">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                    <div class="message-box">
+                        <h4>Your Path to Excellence</h4>
+                        <h2>Enrollment Process</h2>
+                        <p>Our enrollment process is designed to be transparent and straightforward, ensuring a smooth transition for students and families. Follow these steps to join our school:</p>
+                        <ol>
+                            <li><strong>Application Submission:</strong> Complete the online or offline application form available below.</li>
+                            <li><strong>Document Verification:</strong> Submit required documents (listed under Requirements).</li>
+                            <li><strong>Assessment/Interview:</strong> Students for Classes 1–12 may undergo an age-appropriate assessment or interview.</li>
+                            <li><strong>Admission Confirmation:</strong> Receive confirmation and fee payment details within 7 working days.</li>
+                            <li><strong>Orientation:</strong> Attend our welcome orientation for new students and parents.</li>
+                        </ol>
+                        <p>Applications are accepted year-round, subject to seat availability. Contact our admissions office for assistance.</p>
+                        <!-- <a href="#" class="hover-btn-new orange"><span>Learn More</span></a> -->
+                    </div><!-- end messagebox -->
+                </div><!-- end col -->
+
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                    <div class="post-media wow fadeIn">
+                        <img src="{% static 'images/school/abt1.png' %}" alt="Students in classroom" class="img-fluid img-rounded">
+                    </div><!-- end media -->
+                </div><!-- end col -->
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                    <div class="post-media wow fadeIn">
+                        <img src="{% static 'images/school/abt2.png' %}" alt="School campus" class="img-fluid img-rounded">
+                    </div><!-- end media -->
+                </div><!-- end col -->
+
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                    <div class="message-box">
+                        <h2>Requirements</h2>
+                        <p>To ensure a seamless admission process, please prepare the following documents and meet the eligibility criteria:</p>
+                        <ul>
+                            <li><strong>Age Criteria:</strong> LKG (3+ years), UKG (4+ years), Class 1 (5+ years) as of June 1, 2025.</li>
+                            <li><strong>Documents:</strong>
+                                <ul>
+                                    <li>Birth certificate (copy)</li>
+                                    <li>Previous academic records (for Classes 1–12)</li>
+                                    <li>Transfer certificate (if applicable)</li>
+                                    <li>Passport-size photographs (2)</li>
+                                    <li>Proof of residence</li>
+                                </ul>
+                            </li>
+                            <li><strong>Medical Form:</strong> Submit a health certificate signed by a registered medical practitioner.</li>
+                            <li><strong>Parent/Guardian ID:</strong> Copy of Aadhaar or other government-issued ID.</li>
+                        </ul>
+                        <p>All documents must be submitted in English or with certified translations. Contact us for specific requirements for Classes 11–12 streams (Science, Commerce, Arts).</p>
+                        <!-- <a href="#" class="hover-btn-new orange"><span>Learn More</span></a> -->
+                    </div><!-- end messagebox -->
+                </div><!-- end col -->
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                    <div class="message-box">
+                        <h2>Downloadable Forms</h2>
+                        <p>Access our admission forms and related documents below. These can be submitted online or at our admissions office:</p>
+                        <ul>
+                            <li><a href="{% static 'documents/admission_form.pdf' %}" target="_blank">Admission Application Form</a> (PDF, 250 KB)</li>
+                            <li><a href="{% static 'documents/medical_form.pdf' %}" target="_blank">Student Medical Form</a> (PDF, 150 KB)</li>
+                            <li><a href="{% static 'documents/fee_structure.pdf' %}" target="_blank">Fee Structure 2025–26</a> (PDF, 200 KB)</li>
+                            <li><a href="{% static 'documents/admission_brochure.pdf' %}" target="_blank">Admission Brochure</a> (PDF, 1.2 MB)</li>
+                        </ul>
+                        <p>Please ensure all forms are filled accurately and signed where required. For assistance, email admissions@schoolname.org or call +91-123-456-7890.</p>
+                        <!-- <a href="#" class="hover-btn-new orange"><span>Learn More</span></a> -->
+                    </div><!-- end messagebox -->
+                </div><!-- end col -->
+
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                    <div class="post-media wow fadeIn">
+                        <img src="{% static 'images/school/ad.png' %}" alt="Students with teacher" class="img-fluid img-rounded">
+                    </div><!-- end media -->
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+
+    <style>
+    .all-title-box {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static "images/admission_bg.jpg" %}') center center no-repeat;
+        background-size: cover;
+        padding: 70px 0;
+        color: #fff;
+    }
+    .all-title-box h1 {
+        font-size: 36px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .all-title-box .m_1 {
+        display: block;
+        font-size: 18px;
+        font-weight: 300;
+        margin-top: 10px;
+    }
+    .section.lb {
+        padding: 60px 0;
+        background: #f8f9fa;
+    }
+    .section-title h3 {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    .section-title p.lead {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+    }
+    .message-box h4 {
+        font-size: 18px;
+        color: #f28c38;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+    .message-box h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    .message-box p, .message-box ul, .message-box ol {
+        font-size: 15px;
+        color: #444;
+        line-height: 1.8;
+        margin-bottom: 15px;
+    }
+    .message-box ul li, .message-box ol li {
+        margin-bottom: 10px;
+    }
+    .message-box a {
+        color: #f28c38;
+        text-decoration: none;
+    }
+    .message-box a:hover {
+        text-decoration: underline;
+    }
+    .post-media img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    @media (max-width: 768px) {
+        .all-title-box h1 {
+            font-size: 28px;
+        }
+        .all-title-box .m_1 {
+            font-size: 16px;
+        }
+        .section-title h3 {
+            font-size: 24px;
+        }
+        .message-box h2 {
+            font-size: 20px;
+        }
+        .post-media {
+            margin-bottom: 20px;
+        }
+    }
+    </style>
+
+{% endblock %}

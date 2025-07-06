@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<section id="academics" class="academics-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="academics-title">Academics</h1>
+            <p class="academics-subtitle">Empowering students with a robust and dynamic educational experience.</p>
+        </div>
+
+        <!-- Curriculum -->
+        <div class="academics-card mb-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12">
+                    <div class="academics-content">
+                        <h2>Curriculum</h2>
+                        <p>Our curriculum is designed to foster holistic development, blending academic rigor with creative exploration. Aligned with CBSE guidelines, it caters to students from LKG to Class 12, offering:</p>
+                        <ul>
+                            <li><strong>Foundational Stage (LKG–UKG):</strong> Play-based learning focusing on literacy, numeracy, and social skills.</li>
+                            <li><strong>Primary (Classes 1–5):</strong> Core subjects (English, Math, Science, Social Studies) with emphasis on critical thinking.</li>
+                            <li><strong>Secondary (Classes 6–10):</strong> Comprehensive subjects including Languages, Sciences, and Computer Applications.</li>
+                            <li><strong>Senior Secondary (Classes 11–12):</strong> Streams in Science (PCM/PCB), Commerce, and Humanities with elective options.</li>
+                        </ul>
+                        <p>Co-curricular activities like arts, sports, and robotics enhance learning. <a href="{% static 'documents/curriculum_2025.pdf' %}" target="_blank">Download Curriculum Overview (PDF, 600 KB)</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="academics-image">
+                        <img src="{% static 'images/school/curr.png' %}" alt="Students in classroom" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Departments -->
+        <div class="academics-card mb-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12 order-lg-2">
+                    <div class="academics-content">
+                        <h2>Departments</h2>
+                        <p>Our academic departments are led by experienced educators, ensuring specialized instruction across disciplines. Key departments include:</p>
+                        <ul>
+                            <li><strong>Science:</strong> Physics, Chemistry, Biology labs with hands-on experiments.</li>
+                            <li><strong>Mathematics:</strong> Focus on problem-solving and logical reasoning.</li>
+                            <li><strong>Humanities:</strong> History, Geography, Economics, and Psychology for Classes 11–12.</li>
+                            <li><strong>Languages:</strong> English, Hindi, and optional third languages (French, Sanskrit).</li>
+                            <li><strong>Commerce:</strong> Accountancy, Business Studies, and Entrepreneurship.</li>
+                            <li><strong>Physical Education:</strong> Sports and wellness programs.</li>
+                        </ul>
+                        <p>Each department collaborates to deliver interdisciplinary projects. <a href="{% static 'documents/departments_2025.pdf' %}" target="_blank">View Department Details (PDF, 450 KB)</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 order-lg-1">
+                    <div class="academics-image">
+                        <img src="{% static 'images/school/lab.png' %}" alt="Science lab" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Class Schedules -->
+        <div class="academics-card mb-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12">
+                    <div class="academics-content">
+                        <h2>Class Schedules</h2>
+                        <p>Our class schedules are structured to optimize learning while allowing time for extracurricular activities. Key features:</p>
+                        <ul>
+                            <li><strong>Timings:</strong> 8:00 AM–2:00 PM (LKG–UKG), 8:00 AM–3:00 PM (Classes 1–12).</li>
+                            <li><strong>Daily Structure:</strong> 6–8 periods of 40 minutes, including breaks.</li>
+                            <li><strong>Weekly Plans:</strong> Balanced mix of core subjects, electives, and activities.</li>
+                            <li><strong>Stream-Specific (Classes 11–12):</strong> Customized schedules for Science, Commerce, and Humanities.</li>
+                        </ul>
+                        <p>Schedules are available on the parent portal or can be downloaded. <a href="{% static 'documents/class_schedules_2025.pdf' %}" target="_blank">Download Sample Schedule (PDF, 300 KB)</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="academics-image">
+                        <img src="{% static 'images/school/school_tt.jpg' %}" alt="Classroom schedule board" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic Calendar -->
+        <div class="academics-card mb-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12 order-lg-2">
+                    <div class="academics-content">
+                        <h2>Academic Calendar</h2>
+                        <p>The 2025–26 academic calendar outlines key dates to help students and parents plan effectively. Highlights include:</p>
+                        <ul>
+                            <li><strong>Session Start:</strong> June 1, 2025</li>
+                            <li><strong>Mid-Term Exams:</strong> September 15–25, 2025</li>
+                            <li><strong>Diwali Break:</strong> November 1–5, 2025</li>
+                            <li><strong>Annual Exams:</strong> March 1–15, 2026</li>
+                            <li><strong>Summer Vacation:</strong> April 15–May 31, 2026</li>
+                        </ul>
+                        <p>The calendar also includes events like Sports Day, Annual Day, and parent-teacher meetings. <a href="{% static 'documents/academic_calendar_2025_26.pdf' %}" target="_blank">Download Calendar (PDF, 350 KB)</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 order-lg-1">
+                    <div class="academics-image">
+                        <img src="{% static 'images/school/school_cal.jpg' %}" alt="School calendar" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .academics-section {
+        padding: 100px 0;
+        background: #ffffff;
+        min-height: 100vh;
+    }
+
+    .academics-title {
+        font-size: 42px;
+        font-weight: 700;
+        color: #1a3c34;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 15px;
+    }
+
+    .academics-subtitle {
+        font-size: 18px;
+        color: #6c757d;
+        font-style: italic;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .academics-card {
+        background: #f8f9fa;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .academics-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .academics-content {
+        padding: 40px;
+    }
+
+    .academics-content h2 {
+        font-size: 28px;
+        font-weight: 600;
+        color: #1a3c34;
+        margin-bottom: 20px;
+    }
+
+    .academics-content p, .academics-content ul {
+        font-size: 16px;
+        color: #444;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    .academics-content ul li {
+        margin-bottom: 10px;
+    }
+
+    .academics-content a {
+        color: #00aaff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .academics-content a:hover {
+        text-decoration: underline;
+        color: #0077cc;
+    }
+
+    .academics-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+        object-fit: cover;
+        max-height: 400px;
+    }
+
+    @media (max-width: 992px) {
+        .academics-content {
+            padding: 20px;
+        }
+        .academics-title {
+            font-size: 36px;
+        }
+        .academics-subtitle {
+            font-size: 16px;
+        }
+        .academics-content h2 {
+            font-size: 24px;
+        }
+        .academics-image {
+            margin-bottom: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .academics-section {
+            padding: 60px 0;
+        }
+        .academics-title {
+            font-size: 30px;
+        }
+        .academics-content p, .academics-content ul {
+            font-size: 14px;
+        }
+        .academics-image img {
+            max-height: 300px;
+        }
+    }
+</style>
+
+{% endblock %}

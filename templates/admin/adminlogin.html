@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<body>
+  <br><br><br>
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+    data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-md-8 col-lg-6 col-xxl-3">
+            <div class="card mb-0">
+              <div class="card-body">
+                <p class="text-center" style="font-size:24px;">Admin Login</p>
+
+                {% if messages %}
+                  {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">
+                      {{ message }}
+                    </div>
+                  {% endfor %}
+                {% endif %}
+
+                <form method="POST">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                  </div>
+                  <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <a class="text-primary fw-bold forgot-password" href="javascript:void(0)">Forgot Password?</a>
+                  </div>
+
+                  <p id="forgot-password-message" class="text-info" style="display: none; margin-bottom: 1rem;">
+                    WhatsApp the developer on +91 8129033535, to know your password
+                  </p>
+
+                  <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign In</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const forgotPasswordLink = document.querySelector('.forgot-password');
+      const message = document.querySelector('#forgot-password-message');
+
+      forgotPasswordLink.addEventListener('click', function (event) {
+        event.preventDefault();
+        message.style.display = 'block';
+      });
+    });
+  </script>
+
+{% endblock %}

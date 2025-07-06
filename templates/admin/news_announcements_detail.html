@@ -1,0 +1,45 @@
+{% extends 'admin/hfcadminbase.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-body position-relative">
+
+      <!-- Edit Button -->
+      <a href="{% url 'news_announcements_edit' news.pk %}" class="btn btn-primary btn-sm position-absolute" style="top: 20px; right: 20px;">
+        Edit
+      </a>
+
+      <!-- Title -->
+      <h3 class="fw-bold mb-3">{{ news.title }}</h3>
+
+      <!-- Published Info -->
+      <p>
+        <strong>Published:</strong>
+        {% if news.is_published %}
+          <span class="badge bg-success">Yes</span>
+        {% else %}
+          <span class="badge bg-secondary">No</span>
+        {% endif %}
+        |
+        <strong>Date:</strong> {{ news.published_date|date:"d M Y" }}
+      </p>
+
+      <!-- Content -->
+      <hr>
+      <div class="mb-4" style="white-space: pre-line; font-size: 1.1rem;">
+        {{ news.content|linebreaks }}
+      </div>
+
+      <!-- Attachment -->
+      {% if news.attachment %}
+        <div>
+          <a href="{{ news.attachment.url }}" target="_blank" class="btn btn-outline-warning btn-sm">View Attachment</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

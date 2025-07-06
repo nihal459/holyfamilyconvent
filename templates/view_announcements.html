@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section id="news-announcements" class="news-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="news-title">News & Announcements</h1>
+            <p class="news-subtitle">Stay updated with the latest happenings at our school.</p>
+        </div>
+
+        <div class="news-list">
+            {% for announcement in announcements %}
+            <div class="news-item">
+                <div class="news-header" onclick="toggleNews(this)">
+                    <h3>{{ announcement.title }}</h3>
+                    <span class="news-date">{{ announcement.published_date|date:"F d, Y" }}</span>
+                    <i class="fas fa-chevron-down news-toggle"></i>
+                </div>
+                <div class="news-content">
+                    <p>{{ announcement.content|linebreaks }}</p>
+                    {% if announcement.attachment %}
+                        <a href="{{ announcement.attachment.url }}" class="news-link" target="_blank">Download Attachment</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center text-muted">No announcements available at the moment.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container text-center mt-4">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if announcements.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ announcements.previous_page_number }}" aria-label="Previous">&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                    {% endif %}
+
+                    {% for num in announcements.paginator.page_range %}
+                        {% if announcements.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num >= announcements.number|add:'-2' and num <= announcements.number|add:'2' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if announcements.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ announcements.next_page_number }}" aria-label="Next">&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<script>
+    function toggleNews(header) {
+        const content = header.nextElementSibling;
+        const toggleIcon = header.querySelector('.news-toggle');
+        const isOpen = content.style.display === 'block';
+
+        document.querySelectorAll('.news-content').forEach(item => {
+            item.style.display = 'none';
+            item.parentElement.querySelector('.news-toggle').classList.remove('fa-chevron-up');
+            item.parentElement.querySelector('.news-toggle').classList.add('fa-chevron-down');
+        });
+
+        if (!isOpen) {
+            content.style.display = 'block';
+            toggleIcon.classList.remove('fa-chevron-down');
+            toggleIcon.classList.add('fa-chevron-up');
+        }
+    }
+</script>
+
+<style>
+.news-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+h3 {
+    color: white;
+}
+
+.news-title {
+    font-size: 40px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.news-subtitle {
+    font-size: 18px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.news-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.news-item {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    background: #2c3e50;
+    color: #fff;
+}
+
+.news-header h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+.news-date {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-right: 15px;
+}
+
+.news-toggle {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.news-content {
+    display: none;
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+.news-content p {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.news-link {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.news-link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.pagination-container {
+    margin-top: 30px;
+}
+
+.pagination .page-item .page-link {
+    color: #2c3e50;
+    border: 1px solid #dee2e6;
+    margin: 0 3px;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #2c3e50;
+    color: white;
+    border-color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+    .news-title {
+        font-size: 32px;
+    }
+    .news-subtitle {
+        font-size: 16px;
+    }
+    .news-header h3 {
+        font-size: 18px;
+    }
+    .news-date {
+        font-size: 12px;
+    }
+    .news-content p {
+        font-size: 14px;
+    }
+    .news-section {
+        padding: 50px 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .news-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .news-date {
+        margin-right: 0;
+    }
+}
+</style>
+
+{% endblock %}
