@@ -4,6 +4,8 @@ from django.contrib import messages
 from holy_app.models import *
 from django.utils import timezone
 from django.core.paginator import Paginator
+import os
+from django.conf import settings
 
 
 def adminlogin(request):
@@ -26,6 +28,29 @@ def hfcadminlogout(request):
 def hfcadminhome(request):
     return render(request, 'admin/hfcadminhome.html')
 
+
+def ytvideo(request):
+    if request.method == "POST":
+        title = request.POST.get('title')
+        link = request.POST.get('link')
+        if title and link:
+            YTVideo.objects.create(title=title, link=link)
+            messages.success(request, "Video added successfully!")
+        else:
+            messages.error(request, "Both title and video link are required!")
+        return redirect('ytvideo')
+
+    videos = YTVideo.objects.all()
+    paginator = Paginator(videos, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'admin/ytvideo.html', {'page_obj': page_obj})
+
+def delete_ytvideo(request, pk):
+    video = get_object_or_404(YTVideo, pk=pk)
+    video.delete()
+    messages.success(request, "Video deleted successfully!")
+    return redirect('ytvideo')
 
 
 def news_announcements(request):
@@ -99,17 +124,34 @@ def delete_news(request, pk):
     return redirect('news_announcements')
 
 
+
+
+
 def advertisement(request):
     ad = AdvertisementBanner.objects.first()
     if not ad:
         ad = AdvertisementBanner.objects.create(title="Homepage Banner")
 
     if request.method == 'POST':
+        # Handle image1
         if request.FILES.get('image1'):
+            # Delete old image1 if it exists
+            if ad.image1 and os.path.isfile(os.path.join(settings.MEDIA_ROOT, ad.image1.name)):
+                os.remove(os.path.join(settings.MEDIA_ROOT, ad.image1.name))
             ad.image1 = request.FILES['image1']
+        
+        # Handle image2
         if request.FILES.get('image2'):
+            # Delete old image2 if it exists
+            if ad.image2 and os.path.isfile(os.path.join(settings.MEDIA_ROOT, ad.image2.name)):
+                os.remove(os.path.join(settings.MEDIA_ROOT, ad.image2.name))
             ad.image2 = request.FILES['image2']
+        
+        # Handle image3
         if request.FILES.get('image3'):
+            # Delete old image3 if it exists
+            if ad.image3 and os.path.isfile(os.path.join(settings.MEDIA_ROOT, ad.image3.name)):
+                os.remove(os.path.join(settings.MEDIA_ROOT, ad.image3.name))
             ad.image3 = request.FILES['image3']
 
         ad.save()
@@ -117,6 +159,9 @@ def advertisement(request):
         return redirect('advertisement')
 
     return render(request, 'admin/advertisement.html', {'ad': ad})
+
+
+
 
 
 

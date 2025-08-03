@@ -75,14 +75,14 @@
 
     function count($this) {
         var current = parseInt($this.html(), 10);
-        current = current + 50; /* Where 50 is increment */
+        current = current + 10; /* Where 50 is increment */
         $this.html(++current);
         if (current > $this.data('count')) {
             $this.html($this.data('count'));
         } else {
             setTimeout(function() {
                 count($this)
-            }, 30);
+            }, 100);
         }
     }
     $(".stat_count, .stat_count_download").each(function() {

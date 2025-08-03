@@ -42,6 +42,21 @@ class GalleryItem(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+
+class YTVideo(models.Model): 
+    title = models.CharField(max_length=255)
+    link = models.URLField(max_length=255, null=True, blank=True)  
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Gallery Video Item"
+        verbose_name_plural = "Gallery Video"
+
+    def __str__(self):
+        return self.title
 
 
 class ContactMessage(models.Model):

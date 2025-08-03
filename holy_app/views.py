@@ -34,17 +34,53 @@ def view_announcements(request):
     return render(request, 'view_announcements.html', {'announcements': announcements})
 
 
+# def view_gallery(request):
+#     gallery_items = GalleryItem.objects.all()
+#     paginator = Paginator(gallery_items, 15)  # Show 15 items per page
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+    
+#     return render(request, 'view_gallery.html', {
+#         'gallery_items': page_obj,
+#         'page_obj': page_obj
+#     })
+
+
+from itertools import chain
+from operator import attrgetter
+from django.shortcuts import render
+from django.core.paginator import Paginator
+from .models import GalleryItem, YTVideo
+import re
+
 def view_gallery(request):
-    gallery_items = GalleryItem.objects.all()
-    paginator = Paginator(gallery_items, 15)  # Show 15 items per page
+    image_items = list(GalleryItem.objects.all())
+    video_items = list(YTVideo.objects.all())
+
+    def extract_video_id(url):
+        if not url:
+            return ''
+        regex = r'(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})'
+        match = re.search(regex, url)
+        return match.group(1) if match else ''
+
+    for item in image_items:
+        item.media_type = 'image'
+    for item in video_items:
+        item.media_type = 'video'
+        item.video_id = extract_video_id(item.link)
+
+    # Merge and sort by created_at
+    all_items = sorted(chain(image_items, video_items), key=attrgetter('created_at'), reverse=True)
+
+    paginator = Paginator(all_items, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
     return render(request, 'view_gallery.html', {
         'gallery_items': page_obj,
         'page_obj': page_obj
     })
-
 
 
 def view_careers(request):

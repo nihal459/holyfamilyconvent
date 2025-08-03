@@ -74,7 +74,8 @@
         position: relative;
     }
 
-    .slider img {
+    .slider img,
+    .slider iframe {
         max-height: 70vh;
         object-fit: contain;
         width: 100%;
@@ -141,10 +142,6 @@
         display: none;
     }
 
-    .slider img {
-        cursor: pointer;
-    }
-
     @media (max-width: 992px) {
         .gallery-title {
             font-size: 34px;
@@ -167,7 +164,7 @@
         .gallery-item img {
             height: 150px;
         }
-        .slider img {
+        .slider img, .slider iframe {
             max-height: 60vh;
         }
         .slider-nav button,
@@ -194,11 +191,16 @@
             <div class="row g-3 mb-4">
                 {% for item in gallery_items %}
                     <div class="col-lg-3 col-md-6 col-sm-12">
-                        <div class="gallery-item" onclick="openSlider({{ forloop.counter0 }})">
-                            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="img-fluid rounded">
-                        </div>
+                        {% if item.media_type == 'image' %}
+                            <div class="gallery-item" onclick="openSlider({{ forloop.counter0 }})">
+                                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="img-fluid rounded">
+                            </div>
+                        {% elif item.media_type == 'video' %}
+                            <div class="gallery-item" onclick="openVideo('{{ item.link|default:'' }}')">
+                                <img src="https://img.youtube.com/vi/{{ item.video_id }}/hqdefault.jpg" alt="{{ item.title }}" class="img-fluid rounded">
+                            </div>
+                        {% endif %}
                         <br>
-
                     </div>
                     {% if forloop.counter|divisibleby:4 and not forloop.last %}
                         </div><div class="row g-3 mb-4">
@@ -206,7 +208,6 @@
                 {% endfor %}
             </div>
 
-            <!-- Pagination -->
             {% if page_obj.has_other_pages %}
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
@@ -240,7 +241,7 @@
             </div>
         {% endif %}
 
-        <!-- Custom Slider -->
+        <!-- Image Slider -->
         <div class="slider-container" id="sliderContainer">
             <div class="slider">
                 <button class="close-btn" onclick="closeSlider()">×</button>
@@ -252,26 +253,46 @@
                 </div>
             </div>
         </div>
+
+        <!-- Video Modal -->
+        <div class="slider-container" id="videoContainer">
+            <div class="slider">
+                <button class="close-btn" onclick="closeVideo()">×</button>
+                <iframe id="videoFrame" width="100%" height="500" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
     </div>
 </section>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script>
     let currentIndex = 0;
     let navVisible = true;
+
     const galleryItems = [
         {% for item in gallery_items %}
-            { src: "{{ item.image.url }}", caption: "{{ item.description|default:item.title }}" },
+            {% if item.media_type == 'image' %}
+                { type: "image", src: "{{ item.image.url }}", caption: "{{ item.description|default:item.title }}" },
+            {% elif item.media_type == 'video' %}
+                { type: "video", videoId: "{{ item.video_id }}", caption: "{{ item.title }}" },
+            {% endif %}
         {% endfor %}
     ];
 
+    function extractVideoId(url) {
+        const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+        const match = url.match(regex);
+        return match ? match[1] : '';
+    }
+
     function openSlider(index) {
-        currentIndex = index;
-        updateSlider();
-        document.getElementById('sliderContainer').classList.add('active');
-        navVisible = true;
-        toggleNav();
+        if (galleryItems[index].type === 'image') {
+            currentIndex = index;
+            updateSlider();
+            document.getElementById('sliderContainer').classList.add('active');
+            navVisible = true;
+            toggleNav();
+        }
     }
 
     function closeSlider() {
@@ -281,26 +302,46 @@
     function updateSlider() {
         const image = document.getElementById('sliderImage');
         const caption = document.getElementById('sliderCaption');
-        image.src = galleryItems[currentIndex].src;
-        caption.textContent = galleryItems[currentIndex].caption;
+        const item = galleryItems[currentIndex];
+        image.src = item.src;
+        caption.textContent = item.caption;
     }
 
     function prevSlide() {
-        currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+        do {
+            currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+        } while (galleryItems[currentIndex].type !== 'image');
         updateSlider();
     }
 
     function nextSlide() {
-        currentIndex = (currentIndex + 1) % galleryItems.length;
+        do {
+            currentIndex = (currentIndex + 1) % galleryItems.length;
+        } while (galleryItems[currentIndex].type !== 'image');
         updateSlider();
     }
 
     function toggleNav() {
         const nav = document.querySelector('.slider-nav');
-        const closeBtn = document.querySelector('.close-btn');
+        const closeBtn = document.querySelector('#sliderContainer .close-btn');
         navVisible = !navVisible;
         nav.classList.toggle('hidden', !navVisible);
         closeBtn.classList.toggle('hidden', !navVisible);
+    }
+
+    function openVideo(url) {
+        const videoId = extractVideoId(url);
+        if (videoId) {
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            document.getElementById('videoContainer').classList.add('active');
+        }
+    }
+
+    function closeVideo() {
+        const iframe = document.getElementById('videoFrame');
+        iframe.src = '';
+        document.getElementById('videoContainer').classList.remove('active');
     }
 
     document.addEventListener('keydown', function(event) {
@@ -308,6 +349,9 @@
             if (event.key === 'ArrowLeft') prevSlide();
             if (event.key === 'ArrowRight') nextSlide();
             if (event.key === 'Escape') closeSlider();
+        }
+        if (document.getElementById('videoContainer').classList.contains('active') && event.key === 'Escape') {
+            closeVideo();
         }
     });
 </script>

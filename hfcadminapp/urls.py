@@ -16,7 +16,8 @@ urlpatterns = [
     path('delete_careers/<int:pk>/', views.delete_careers, name='delete_careers'),
     path('enquiries', views.enquiries, name='enquiries'),
     path('delete_messages/<int:pk>/', views.delete_messages, name='delete_messages'),
-
+    path('ytvideo', views.ytvideo, name='ytvideo'),
+    path('delete_ytvideo/<int:pk>/', views.delete_ytvideo, name='delete_ytvideo'),
 
 
 
