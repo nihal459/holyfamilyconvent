@@ -16,6 +16,8 @@
         text-align: center;
         margin-bottom: 20px;
         text-transform: uppercase;
+        opacity: 0;
+        animation: slideUpFadeIn 1s ease-in forwards;
     }
 
     .gallery-subtitle {
@@ -33,6 +35,10 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        opacity: 0;
+        animation: slideUpFadeIn 1s ease-in forwards;
+        animation-delay: calc(0.1s * var(--index)); /* Staggered animation for items */
     }
 
     .gallery-item:hover {
@@ -47,6 +53,27 @@
         display: block;
     }
 
+    .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 30px;
+        transition: background 0.3s ease;
+    }
+
+    .play-button:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
     .slider-container {
         position: fixed;
         top: 0;
@@ -54,7 +81,7 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.9);
-        z-index: 1000;
+        z-flyin: 1000;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -74,11 +101,17 @@
         position: relative;
     }
 
-    .slider img,
-    .slider iframe {
+    .slider img {
         max-height: 70vh;
         object-fit: contain;
         width: 100%;
+        border-radius: 8px;
+    }
+
+    .slider iframe {
+        width: 80vw;
+        height: 80vh;
+        aspect-ratio: 16 / 9;
         border-radius: 8px;
     }
 
@@ -91,6 +124,10 @@
         padding: 10px 15px;
         border-radius: 5px;
         font-size: 16px;
+    }
+
+    #videoCaption {
+        bottom: -50px;
     }
 
     .slider-nav {
@@ -142,6 +179,17 @@
         display: none;
     }
 
+    @keyframes slideUpFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(100px); /* Start from below */
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0); /* Slide up to original position */
+        }
+    }
+
     @media (max-width: 992px) {
         .gallery-title {
             font-size: 34px;
@@ -151,6 +199,10 @@
         }
         .gallery-item img {
             height: 180px;
+        }
+        .slider iframe {
+            width: 85vw;
+            height: 65vh;
         }
     }
 
@@ -165,7 +217,8 @@
             height: 150px;
         }
         .slider img, .slider iframe {
-            max-height: 60vh;
+            width: 90vw;
+            height: 50vh;
         }
         .slider-nav button,
         .close-btn {
@@ -176,6 +229,14 @@
         .col-sm-12 {
             flex: 0 0 50%;
             max-width: 50%;
+        }
+        .play-button {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+        #videoCaption {
+            bottom: -40px;
         }
     }
 </style>
@@ -192,12 +253,13 @@
                 {% for item in gallery_items %}
                     <div class="col-lg-3 col-md-6 col-sm-12">
                         {% if item.media_type == 'image' %}
-                            <div class="gallery-item" onclick="openSlider({{ forloop.counter0 }})">
+                            <div class="gallery-item" style="--index: {{ forloop.counter0 }}" onclick="openSlider({{ forloop.counter0 }})">
                                 <img src="{{ item.image.url }}" alt="{{ item.title }}" class="img-fluid rounded">
                             </div>
                         {% elif item.media_type == 'video' %}
-                            <div class="gallery-item" onclick="openVideo('{{ item.link|default:'' }}')">
+                            <div class="gallery-item" style="--index: {{ forloop.counter0 }}" onclick="openVideo('{{ item.link|default:'' }}', '{{ item.title }}')">
                                 <img src="https://img.youtube.com/vi/{{ item.video_id }}/hqdefault.jpg" alt="{{ item.title }}" class="img-fluid rounded">
+                                <div class="play-button">&#9654;</div>
                             </div>
                         {% endif %}
                         <br>
@@ -258,8 +320,9 @@
         <div class="slider-container" id="videoContainer">
             <div class="slider">
                 <button class="close-btn" onclick="closeVideo()">×</button>
-                <iframe id="videoFrame" width="100%" height="500" frameborder="0"
+                <iframe id="videoFrame" width="100%" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div class="slider-caption" id="videoCaption"></div>
             </div>
         </div>
     </div>
@@ -329,18 +392,22 @@
         closeBtn.classList.toggle('hidden', !navVisible);
     }
 
-    function openVideo(url) {
+    function openVideo(url, title) {
         const videoId = extractVideoId(url);
         if (videoId) {
             const iframe = document.getElementById('videoFrame');
+            const caption = document.getElementById('videoCaption');
             iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            caption.textContent = title;
             document.getElementById('videoContainer').classList.add('active');
         }
     }
 
     function closeVideo() {
         const iframe = document.getElementById('videoFrame');
+        const caption = document.getElementById('videoCaption');
         iframe.src = '';
+        caption.textContent = '';
         document.getElementById('videoContainer').classList.remove('active');
     }
 
